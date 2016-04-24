@@ -1,4 +1,4 @@
-package com.dogaozkaraca.izunetwork;
+package com.dogaozkaraca.izunetwork.AdapterItems;
 
 import java.util.Date;
 

@@ -1,4 +1,4 @@
-package com.dogaozkaraca.izunetwork;
+package com.dogaozkaraca.izunetwork.Fragments;
 
 import android.app.Fragment;
 import android.os.Bundle;
@@ -7,6 +7,10 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+
+import com.dogaozkaraca.izunetwork.Adapters.FeedAdapter;
+import com.dogaozkaraca.izunetwork.AdapterItems.FeedItem;
+import com.dogaozkaraca.izunetwork.R;
 
 import java.util.ArrayList;
 

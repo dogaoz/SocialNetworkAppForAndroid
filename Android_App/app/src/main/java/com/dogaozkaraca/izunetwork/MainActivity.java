@@ -5,8 +5,6 @@ import android.app.FragmentTransaction;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -18,8 +16,13 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.LinearLayout;
 
-import java.lang.reflect.Array;
-import java.util.ArrayList;
+import com.dogaozkaraca.izunetwork.Dialogs.NewPost_Dialog;
+import com.dogaozkaraca.izunetwork.Fragments.AnasayfaFragment;
+import com.dogaozkaraca.izunetwork.Fragments.FriendsFragment;
+import com.dogaozkaraca.izunetwork.Fragments.GroupsFragment;
+import com.dogaozkaraca.izunetwork.Fragments.NotificationsFragment;
+import com.dogaozkaraca.izunetwork.Fragments.ProfileFragment;
+import com.dogaozkaraca.izunetwork.Fragments.SettingsFragment;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -46,8 +49,10 @@ public class MainActivity extends AppCompatActivity
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
+                //Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
+                //        .setAction("Action", null).show();
+                NewPost_Dialog dialog = new NewPost_Dialog(MainActivity.this);
+                dialog.show();
             }
         });
 

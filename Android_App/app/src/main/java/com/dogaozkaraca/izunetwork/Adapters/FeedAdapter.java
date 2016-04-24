@@ -1,4 +1,4 @@
-package com.dogaozkaraca.izunetwork;
+package com.dogaozkaraca.izunetwork.Adapters;
 
 import android.graphics.Color;
 import android.support.v7.widget.RecyclerView;
@@ -8,7 +8,9 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import java.security.spec.ECField;
+import com.dogaozkaraca.izunetwork.AdapterItems.FeedItem;
+import com.dogaozkaraca.izunetwork.R;
+
 import java.util.ArrayList;
 
 /**
