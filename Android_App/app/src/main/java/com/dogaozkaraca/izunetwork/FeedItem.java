@@ -51,4 +51,19 @@ public class FeedItem {
         return content;
     }
 
+    public String getPostedTime() {
+        return "3 saat önce.";
+    }
+
+    public int getDislikeCount() {
+        return dislikeCount;
+    }
+
+    public int getLikeCount() {
+        return likeCount;
+    }
+
+    public int getCommentCount() {
+        return commentCount;
+    }
 }

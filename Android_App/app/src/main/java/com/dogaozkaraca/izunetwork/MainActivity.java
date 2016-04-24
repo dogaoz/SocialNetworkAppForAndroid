@@ -1,5 +1,7 @@
 package com.dogaozkaraca.izunetwork;
 
+import android.app.FragmentManager;
+import android.app.FragmentTransaction;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -14,23 +16,33 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.LinearLayout;
 
 import java.lang.reflect.Array;
 import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
-    private RecyclerView mRecyclerView;
-    private RecyclerView.Adapter mAdapter;
-    private RecyclerView.LayoutManager mLayoutManager;
+
+    FragmentManager fragmentManager;
+    NotificationsFragment notifications_frag;
+    AnasayfaFragment anasayfa_frag;
+    FriendsFragment friends_frag;
+    GroupsFragment groups_frag;
+    SettingsFragment settings_frag;
+    ProfileFragment profile_frag;
+    MenuItem actionItem;
+    FloatingActionButton fab;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+        this.getSupportActionBar().setTitle("Ana Sayfa");
+        fragmentManager = getFragmentManager();
 
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
+        fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -39,34 +51,47 @@ public class MainActivity extends AppCompatActivity
             }
         });
 
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        final DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.setDrawerListener(toggle);
         toggle.syncState();
 
-        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
+        final NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
+        navigationView.getMenu().getItem(0).setChecked(true);
 
-        // RecyclerView
-        mRecyclerView = (RecyclerView) findViewById(R.id.my_recycler_view);
 
-        // use this setting to improve performance if you know that changes
-        // in content do not change the layout size of the RecyclerView
-        mRecyclerView.setHasFixedSize(true);
+        //Define Fragments
+        notifications_frag = new NotificationsFragment();
+        anasayfa_frag = new AnasayfaFragment();
+        friends_frag = new FriendsFragment();
+        groups_frag = new GroupsFragment();
+        settings_frag = new SettingsFragment();
+        profile_frag = new ProfileFragment();
 
-        // use a linear layout manager
-        mLayoutManager = new LinearLayoutManager(this);
-        mRecyclerView.setLayoutManager(mLayoutManager);
+        // update the main content by replacing fragments
+        fragmentManager.beginTransaction()
+                .replace(R.id.viewHolderContainer, anasayfa_frag)
+                .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
+                .addToBackStack(null)
+                .commit();
 
-        // specify an adapter (see also next example)
-        ArrayList<FeedItem> feed = new ArrayList<>();
-        feed.add(new FeedItem(1,"Name","LastName","Image URL","Post Content",null,null,22,22,22));
-        feed.add(new FeedItem(2,"Name","LastName","Image URL","Post Content 2 ",null,null,22,22,22));
-        feed.add(new FeedItem(3,"Name","LastName","Image URL","Post Content 3 ",null,null,22,22,22));
-        feed.add(new FeedItem(4,"Name","LastName","Image URL","Post Content 4 ",null,null,22,22,22));
-        mAdapter = new FeedAdapter(feed);
-        mRecyclerView.setAdapter(mAdapter);
+        LinearLayout profile_header = (LinearLayout) navigationView.getHeaderView(0).findViewById(R.id.profile_header);
+        profile_header.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                MainActivity.this.getSupportActionBar().setTitle("Profilim");
+                actionItem.setIcon(R.drawable.ic_mode_edit_white_48dp);
+                drawer.closeDrawers();
+                fragmentManager.beginTransaction()
+                        .replace(R.id.viewHolderContainer, profile_frag)
+                        .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
+                        .addToBackStack(null)
+                        .commit();
+            }
+        });
+
 
     }
 
@@ -84,6 +109,8 @@ public class MainActivity extends AppCompatActivity
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.main, menu);
+
+        actionItem = menu.getItem(0);
         return true;
     }
 
@@ -94,8 +121,52 @@ public class MainActivity extends AppCompatActivity
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
 
+
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_notifications) {
+            if(this.getSupportActionBar().getTitle().equals("Bildirimler"))
+            {
+                this.getSupportActionBar().setTitle("Ana Sayfa");
+                item.setIcon(R.drawable.ic_notifications_white_48dp);
+                // update the main content by replacing fragments
+                fragmentManager.beginTransaction()
+                        .replace(R.id.viewHolderContainer, anasayfa_frag)
+                        .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
+                        .addToBackStack(null)
+                        .commit();
+                fab.setVisibility(View.VISIBLE);
+                fab.setImageResource(R.drawable.ic_add_white_48dp);
+
+
+            }
+            else if(this.getSupportActionBar().getTitle().equals("Profilim"))
+            {
+                //Launch Profile Editor
+                this.getSupportActionBar().setTitle("Profilimi Düzenle");
+                item.setIcon(R.drawable.ic_done_white_48dp);
+
+            }
+            else if(this.getSupportActionBar().getTitle().equals("Profilimi Düzenle"))
+            {
+                //Launch Profile Editor
+                item.setIcon(R.drawable.ic_mode_edit_white_48dp);
+                this.getSupportActionBar().setTitle("Profilim");
+
+            }
+            else
+            {
+                this.getSupportActionBar().setTitle("Bildirimler");
+                item.setIcon(R.drawable.ic_home_white_48dp);
+                // update the main content by replacing fragments
+                fragmentManager.beginTransaction()
+                        .replace(R.id.viewHolderContainer, notifications_frag)
+                        .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
+                        .addToBackStack(null)
+                        .commit();
+                fab.setVisibility(View.GONE);
+
+            }
+
             return true;
         }
 
@@ -107,19 +178,56 @@ public class MainActivity extends AppCompatActivity
     public boolean onNavigationItemSelected(MenuItem item) {
         // Handle navigation view item clicks here.
         int id = item.getItemId();
+        fab.setVisibility(View.VISIBLE);
+        actionItem.setIcon(R.drawable.ic_notifications_white_48dp);
+        if (id == R.id.home)
+        {
+            this.getSupportActionBar().setTitle("Ana Sayfa");
+            // update the main content by replacing fragments
+            fragmentManager.beginTransaction()
+                    .replace(R.id.viewHolderContainer, anasayfa_frag)
+                    .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
+                    .addToBackStack(null)
+                    .commit();
+            fab.setVisibility(View.VISIBLE);
+            fab.setImageResource(R.drawable.ic_add_white_48dp);
+        }
+        else if (id == R.id.friends)
+        {
+            this.getSupportActionBar().setTitle("Arkadaşlar");
+            // update the main content by replacing fragments
+            fragmentManager.beginTransaction()
+                    .replace(R.id.viewHolderContainer, friends_frag)
+                    .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
+                    .addToBackStack(null)
+                    .commit();
+            fab.setVisibility(View.VISIBLE);
+            fab.setImageResource(R.drawable.ic_person_add_white_48dp);
 
-        if (id == R.id.nav_camera) {
-            // Handle the camera action
-        } else if (id == R.id.nav_gallery) {
-
-        } else if (id == R.id.nav_slideshow) {
-
-        } else if (id == R.id.nav_manage) {
-
-        } else if (id == R.id.nav_share) {
-
-        } else if (id == R.id.nav_send) {
-
+        }
+        else if (id == R.id.groups)
+        {
+            this.getSupportActionBar().setTitle("Gruplar");
+            // update the main content by replacing fragments
+            fragmentManager.beginTransaction()
+                    .replace(R.id.viewHolderContainer, groups_frag)
+                    .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
+                    .addToBackStack(null)
+                    .commit();
+            fab.setVisibility(View.VISIBLE);
+            fab.setImageResource(R.drawable.ic_add_white_48dp);
+        }
+        else if (id == R.id.settings)
+        {
+            this.getSupportActionBar().setTitle("Ayarlar");
+            // update the main content by replacing fragments
+            fragmentManager.beginTransaction()
+                    .replace(R.id.viewHolderContainer, settings_frag)
+                    .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
+                    .addToBackStack(null)
+                    .commit();
+            fab.setVisibility(View.VISIBLE);
+            fab.setVisibility(View.GONE);
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
