@@ -248,15 +248,15 @@ public class MainActivity extends AppCompatActivity
         }
         else if (id == R.id.groups)
         {
-            this.getSupportActionBar().setTitle("Gönderi Detayları");
+            this.getSupportActionBar().setTitle("Gruplar");
             // update the main content by replacing fragments
             fragmentManager.beginTransaction()
-                    .replace(R.id.viewHolderContainer, post_frag)
+                    .replace(R.id.viewHolderContainer, groups_frag)
                     .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
                     .addToBackStack(null)
                     .commit();
-            fab.setVisibility(View.GONE);
-            //fab.setImageResource(R.drawable.ic_add_white_48dp);
+            fab.setVisibility(View.VISIBLE);
+            fab.setImageResource(R.drawable.ic_add_white_48dp);
         }
         else if (id == R.id.settings)
         {
