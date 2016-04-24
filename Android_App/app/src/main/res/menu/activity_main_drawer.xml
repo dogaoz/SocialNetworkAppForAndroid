@@ -18,6 +18,10 @@
             android:id="@+id/settings"
             android:icon="@drawable/ic_settings_black_48dp"
             android:title="Ayarlar" />
+        <item
+            android:id="@+id/admin_panel"
+            android:icon="@drawable/ic_person_black_48dp"
+            android:title="\u2605Admin Paneli\u2605" />
     </group>
 
 

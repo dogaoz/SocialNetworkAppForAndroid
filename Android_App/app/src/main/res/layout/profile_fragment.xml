@@ -14,6 +14,9 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     android:background="#262626"
     android:id="@+id/linearLayout">
+
+
+
     <de.hdodenhof.circleimageview.CircleImageView
         xmlns:app="http://schemas.android.com/apk/res-auto"
         android:id="@+id/imageView"
@@ -36,5 +39,13 @@
 
 
 </LinearLayout>
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/my_recycler_view"
+        android:scrollbars="vertical"
+        android:background="#EEEEEE"
+        android:layout_below="@id/linearLayout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"/>
 
 </RelativeLayout>

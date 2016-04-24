@@ -7,9 +7,12 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
-import com.dogaozkaraca.izunetwork.AdapterItems.FeedItem;
-import com.dogaozkaraca.izunetwork.Adapters.FeedAdapter;
+import com.dogaozkaraca.izunetwork.AdapterItems.FriendItem;
+import com.dogaozkaraca.izunetwork.AdapterItems.ReportedPostItem;
+import com.dogaozkaraca.izunetwork.Adapters.FriendsAdapter;
+import com.dogaozkaraca.izunetwork.Adapters.ReportedPostAdapter;
 import com.dogaozkaraca.izunetwork.R;
 
 import java.util.ArrayList;
@@ -18,7 +21,7 @@ import java.util.ArrayList;
  * Izu Network
  * Created by doga on 24/04/16.
  */
-public class ProfileFragment extends Fragment {
+public class AdminFragment extends Fragment {
     private RecyclerView mRecyclerView;
     private RecyclerView.Adapter mAdapter;
     private RecyclerView.LayoutManager mLayoutManager;
@@ -26,9 +29,11 @@ public class ProfileFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View v = inflater.inflate(R.layout.profile_fragment, container, false);
+        View v = inflater.inflate(R.layout.admin_fragment, container, false);
 
-        //Load Profile Posts
+        //Load Admin Panel
+        TextView noReported = (TextView) v.findViewById(R.id.noreportedpoststext);
+
 
         // RecyclerView
         mRecyclerView = (RecyclerView) v.findViewById(R.id.my_recycler_view);
@@ -42,14 +47,23 @@ public class ProfileFragment extends Fragment {
         mRecyclerView.setLayoutManager(mLayoutManager);
 
         // specify an adapter (see also next example)
-        ArrayList<FeedItem> feed = new ArrayList<>();
-        feed.add(new FeedItem(1,"Adı","Soyadı","profileImage URL","Gönderi 1 ",null,null,150,15,3));
-        feed.add(new FeedItem(2,"Adı","Soyadı","profileImage URL","Gönderi 2 ",null,null,18,65,45));
-        feed.add(new FeedItem(3,"Adı","Soyadı","profileImage URL","Gönderi 3 ",null,null,45,2,0));
-        feed.add(new FeedItem(4,"Adı","Soyadı","profileImage URL","Gönderi 4 ",null,null,120,4,22));
-        mAdapter = new FeedAdapter(feed);
-        mRecyclerView.setAdapter(mAdapter);
+        ArrayList<ReportedPostItem> feed = new ArrayList<>();
+        feed.add(new ReportedPostItem(1,""));
 
+        if (feed.isEmpty())
+        {
+            noReported.setVisibility(View.VISIBLE);
+            mRecyclerView.setVisibility(View.GONE);
+        }
+        else
+        {
+            noReported.setVisibility(View.GONE);
+            mRecyclerView.setVisibility(View.VISIBLE);
+
+
+        }
+        mAdapter = new ReportedPostAdapter(feed);
+        mRecyclerView.setAdapter(mAdapter);
 
 
         return v;

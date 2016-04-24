@@ -18,10 +18,13 @@ import android.widget.LinearLayout;
 
 import com.dogaozkaraca.izunetwork.Dialogs.CreateGroup_Dialog;
 import com.dogaozkaraca.izunetwork.Dialogs.NewPost_Dialog;
+import com.dogaozkaraca.izunetwork.Fragments.AdminFragment;
 import com.dogaozkaraca.izunetwork.Fragments.AnasayfaFragment;
 import com.dogaozkaraca.izunetwork.Fragments.FriendsFragment;
 import com.dogaozkaraca.izunetwork.Fragments.GroupsFragment;
 import com.dogaozkaraca.izunetwork.Fragments.NotificationsFragment;
+import com.dogaozkaraca.izunetwork.Fragments.PostFragment;
+import com.dogaozkaraca.izunetwork.Fragments.ProfileEditFragment;
 import com.dogaozkaraca.izunetwork.Fragments.ProfileFragment;
 import com.dogaozkaraca.izunetwork.Fragments.SettingsFragment;
 
@@ -35,6 +38,10 @@ public class MainActivity extends AppCompatActivity
     GroupsFragment groups_frag;
     SettingsFragment settings_frag;
     ProfileFragment profile_frag;
+    AdminFragment admin_frag;
+    ProfileEditFragment profileedit_frag;
+    PostFragment post_frag;
+
     MenuItem actionItem;
     FloatingActionButton fab;
     public static int currentUserID;
@@ -60,7 +67,7 @@ public class MainActivity extends AppCompatActivity
                 }
                 else if (getSupportActionBar().getTitle().equals("Arkadaşlar"))
                 {
-                    
+
                 }
                 else
                 {
@@ -88,7 +95,9 @@ public class MainActivity extends AppCompatActivity
         groups_frag = new GroupsFragment();
         settings_frag = new SettingsFragment();
         profile_frag = new ProfileFragment();
-
+        admin_frag = new AdminFragment();
+        profileedit_frag = new ProfileEditFragment();
+        post_frag = new PostFragment();
         // update the main content by replacing fragments
         fragmentManager.beginTransaction()
                 .replace(R.id.viewHolderContainer, anasayfa_frag)
@@ -163,6 +172,13 @@ public class MainActivity extends AppCompatActivity
                 //Launch Profile Editor
                 this.getSupportActionBar().setTitle("Profilimi Düzenle");
                 item.setIcon(R.drawable.ic_done_white_48dp);
+                fragmentManager.beginTransaction()
+                        .replace(R.id.viewHolderContainer, profileedit_frag)
+                        .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
+                        .addToBackStack(null)
+                        .commit();
+                fab.setVisibility(View.GONE);
+
 
             }
             else if(this.getSupportActionBar().getTitle().equals("Profilimi Düzenle"))
@@ -170,6 +186,12 @@ public class MainActivity extends AppCompatActivity
                 //Launch Profile Editor
                 item.setIcon(R.drawable.ic_mode_edit_white_48dp);
                 this.getSupportActionBar().setTitle("Profilim");
+                fragmentManager.beginTransaction()
+                        .replace(R.id.viewHolderContainer, profile_frag)
+                        .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
+                        .addToBackStack(null)
+                        .commit();
+                fab.setVisibility(View.VISIBLE);
 
             }
             else
@@ -226,15 +248,15 @@ public class MainActivity extends AppCompatActivity
         }
         else if (id == R.id.groups)
         {
-            this.getSupportActionBar().setTitle("Gruplar");
+            this.getSupportActionBar().setTitle("Gönderi Detayları");
             // update the main content by replacing fragments
             fragmentManager.beginTransaction()
-                    .replace(R.id.viewHolderContainer, groups_frag)
+                    .replace(R.id.viewHolderContainer, post_frag)
                     .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
                     .addToBackStack(null)
                     .commit();
-            fab.setVisibility(View.VISIBLE);
-            fab.setImageResource(R.drawable.ic_add_white_48dp);
+            fab.setVisibility(View.GONE);
+            //fab.setImageResource(R.drawable.ic_add_white_48dp);
         }
         else if (id == R.id.settings)
         {
@@ -245,7 +267,17 @@ public class MainActivity extends AppCompatActivity
                     .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
                     .addToBackStack(null)
                     .commit();
-            fab.setVisibility(View.VISIBLE);
+            fab.setVisibility(View.GONE);
+        }
+        else if (id == R.id.admin_panel)
+        {
+            this.getSupportActionBar().setTitle("Admin Kontrol Paneli");
+            // update the main content by replacing fragments
+            fragmentManager.beginTransaction()
+                    .replace(R.id.viewHolderContainer, admin_frag)
+                    .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
+                    .addToBackStack(null)
+                    .commit();
             fab.setVisibility(View.GONE);
         }
 

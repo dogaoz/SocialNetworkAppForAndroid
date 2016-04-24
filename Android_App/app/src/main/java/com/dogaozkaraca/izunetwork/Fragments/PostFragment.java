@@ -8,17 +8,20 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.dogaozkaraca.izunetwork.AdapterItems.CommentItem;
 import com.dogaozkaraca.izunetwork.AdapterItems.FeedItem;
+import com.dogaozkaraca.izunetwork.AdapterItems.NotificationItem;
+import com.dogaozkaraca.izunetwork.Adapters.CommentsAdapter;
 import com.dogaozkaraca.izunetwork.Adapters.FeedAdapter;
 import com.dogaozkaraca.izunetwork.R;
 
 import java.util.ArrayList;
 
 /**
- * Izu Network
+ * Izu Reader
  * Created by doga on 24/04/16.
  */
-public class ProfileFragment extends Fragment {
+public class PostFragment extends Fragment {
     private RecyclerView mRecyclerView;
     private RecyclerView.Adapter mAdapter;
     private RecyclerView.LayoutManager mLayoutManager;
@@ -26,9 +29,9 @@ public class ProfileFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View v = inflater.inflate(R.layout.profile_fragment, container, false);
+        View v = inflater.inflate(R.layout.post_fragment, container, false);
 
-        //Load Profile Posts
+        //Load Post and its comment
 
         // RecyclerView
         mRecyclerView = (RecyclerView) v.findViewById(R.id.my_recycler_view);
@@ -42,12 +45,9 @@ public class ProfileFragment extends Fragment {
         mRecyclerView.setLayoutManager(mLayoutManager);
 
         // specify an adapter (see also next example)
-        ArrayList<FeedItem> feed = new ArrayList<>();
-        feed.add(new FeedItem(1,"Adı","Soyadı","profileImage URL","Gönderi 1 ",null,null,150,15,3));
-        feed.add(new FeedItem(2,"Adı","Soyadı","profileImage URL","Gönderi 2 ",null,null,18,65,45));
-        feed.add(new FeedItem(3,"Adı","Soyadı","profileImage URL","Gönderi 3 ",null,null,45,2,0));
-        feed.add(new FeedItem(4,"Adı","Soyadı","profileImage URL","Gönderi 4 ",null,null,120,4,22));
-        mAdapter = new FeedAdapter(feed);
+        ArrayList<CommentItem> feed = new ArrayList<>();
+        feed.add(new CommentItem(2,"Doğa","Özkaraca","imageurl.com","bir gönderini beğendi.",null));
+        mAdapter = new CommentsAdapter(feed);
         mRecyclerView.setAdapter(mAdapter);
 
 
