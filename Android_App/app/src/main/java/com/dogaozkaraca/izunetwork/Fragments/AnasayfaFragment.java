@@ -43,10 +43,10 @@ public class AnasayfaFragment  extends Fragment {
 
         // specify an adapter (see also next example)
         ArrayList<FeedItem> feed = new ArrayList<>();
-        feed.add(new FeedItem(1,"Adı","Soyadı","Image URL","Gönderi 1 ",null,null,150,15,3));
-        feed.add(new FeedItem(2,"Adı","Soyadı","Image URL","Gönderi 2 ",null,null,18,65,45));
-        feed.add(new FeedItem(3,"Adı","Soyadı","Image URL","Gönderi 3 ",null,null,45,2,0));
-        feed.add(new FeedItem(4,"Adı","Soyadı","Image URL","Gönderi 4 ",null,null,120,4,22));
+        feed.add(new FeedItem(1,"Adı","Soyadı","profileImage URL","Gönderi 1 ",null,null,150,15,3));
+        feed.add(new FeedItem(2,"Adı","Soyadı","profileImage URL","Gönderi 2 ",null,null,18,65,45));
+        feed.add(new FeedItem(3,"Adı","Soyadı","profileImage URL","Gönderi 3 ",null,null,45,2,0));
+        feed.add(new FeedItem(4,"Adı","Soyadı","profileImage URL","Gönderi 4 ",null,null,120,4,22));
         mAdapter = new FeedAdapter(feed);
         mRecyclerView.setAdapter(mAdapter);
 

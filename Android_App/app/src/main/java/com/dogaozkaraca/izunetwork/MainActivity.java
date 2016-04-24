@@ -16,6 +16,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.LinearLayout;
 
+import com.dogaozkaraca.izunetwork.Dialogs.CreateGroup_Dialog;
 import com.dogaozkaraca.izunetwork.Dialogs.NewPost_Dialog;
 import com.dogaozkaraca.izunetwork.Fragments.AnasayfaFragment;
 import com.dogaozkaraca.izunetwork.Fragments.FriendsFragment;
@@ -36,6 +37,7 @@ public class MainActivity extends AppCompatActivity
     ProfileFragment profile_frag;
     MenuItem actionItem;
     FloatingActionButton fab;
+    public static int currentUserID;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -51,8 +53,20 @@ public class MainActivity extends AppCompatActivity
             public void onClick(View view) {
                 //Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
                 //        .setAction("Action", null).show();
-                NewPost_Dialog dialog = new NewPost_Dialog(MainActivity.this);
-                dialog.show();
+                if (getSupportActionBar().getTitle().equals("Gruplar"))
+                {
+                    CreateGroup_Dialog dialog = new CreateGroup_Dialog(MainActivity.this);
+                    dialog.show();
+                }
+                else if (getSupportActionBar().getTitle().equals("Arkadaşlar"))
+                {
+                    
+                }
+                else
+                {
+                    NewPost_Dialog dialog = new NewPost_Dialog(MainActivity.this);
+                    dialog.show();
+                }
             }
         });
 
@@ -66,7 +80,7 @@ public class MainActivity extends AppCompatActivity
         navigationView.setNavigationItemSelectedListener(this);
         navigationView.getMenu().getItem(0).setChecked(true);
 
-
+        currentUserID = 1;
         //Define Fragments
         notifications_frag = new NotificationsFragment();
         anasayfa_frag = new AnasayfaFragment();
