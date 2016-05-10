@@ -21,7 +21,7 @@ drop table if exists dbReportType
 drop table if exists dbAdminOfReportType
 
 CREATE TABLE dbUser (
-	userID int(10) NOT NULL,
+	userID int(10) NOT NULL AUTO_INCREMENT,
 	userName varchar(50) NOT NULL,
 	userLastName varchar(50) NOT NULL,
 	userBirthdate date NOT NULL,
@@ -95,7 +95,7 @@ CREATE TABLE dbuserHighschool (
 )
 
 CREATE TABLE dbGroup (
-    groupID int(10) NOT NULL,
+    groupID int(10) NOT NULL AUTO_INCREMENT,
     groupName varchar(100) NOT NULL,
     createdBy_userID int(10) NOT NULL,
     groupProfilePicURL varchar(300),
@@ -108,7 +108,7 @@ CREATE TABLE dbGroupMembers (
 )
 
 CREATE TABLE dbPost (
-	postID int(10) NOT NULL,
+	postID int(10) NOT NULL AUTO_INCREMENT,
 	userID int(10) NOT NULL,
 	groupID int(10),
 	postText varchar(200),
@@ -143,7 +143,7 @@ CREATE TABLE dbDislike (
 )
 
 CREATE TABLE dbReportedPost (
-	reportID int(11) NOT NULL,
+	reportID int(11) NOT NULL AUTO_INCREMENT,
 	postID int(10) NOT NULL,
 	reportedBy_userID int(10) NOT NULL,
 	typeID tinyint NOT NULL,
