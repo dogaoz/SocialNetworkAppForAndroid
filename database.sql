@@ -1,147 +1,164 @@
 drop table if exists dbUser
-drop table if exists Friend
-drop table if exists Notification
-drop table if exists InteractionType
-drop table if exists userLocation
+drop table if exists dbFriend
+drop table if exists dbNotification
+drop table if exists dbInteractionType
+drop table if exists dbuserLocation
 drop table if exists dbState
 drop table if exists dbCity
 drop table if exists dbUniversity
 drop table if exists dbHighschool
-drop table if exists userUniversity
-drop table if exists userHighschool
+drop table if exists dbuserUniversity
+drop table if exists dbuserHighschool
 drop table if exists dbGroup
 drop table if exists dbGroupMembers
 drop table if exists dbPost
-drop table if exists Comment
-drop table if exists Image
+drop table if exists dbComment
+drop table if exists dbImage
 drop table if exists dbLike
 drop table if exists dbDislike
-drop table if exists ReportedPost
-drop table if exists ReportType
-drop table if exists AdminOfReportType
+drop table if exists dbReportedPost
+drop table if exists dbReportType
+drop table if exists dbAdminOfReportType
 
 CREATE TABLE dbUser (
-	userID int(10),
-	userName varchar(50),
-	userLastName varchar(50),
-	userBirthdate date,
-	userProfilePicURL varchar(300),
-	userEmail varchar(300),
-	userPassword varchar(300)
-)
-
-CREATE TABLE Friend (
 	userID int(10) NOT NULL,
-	userID_ofFriend int(10) NOT NULL
+	userName varchar(50) NOT NULL,
+	userLastName varchar(50) NOT NULL,
+	userBirthdate date NOT NULL,
+	userProfilePicURL varchar(300) NOT NULL,
+	userEmail varchar(300) NOT NULL,
+	userPassword varchar(300) NOT NULL,
+	constraint PKuser primary key (userID)
 )
 
-CREATE TABLE Notification (
+CREATE TABLE dbFriend (
+	userID int(10) NOT NULL,
+	userID_ofFriend int(10) NOT NULL,
+	constraint PKfriend primary key (userID, userID_ofFriend)
+)
+
+CREATE TABLE dbNotification (
 	affected_userID int(10) NOT NULL,
-	interactionBy_userID int(10),
-	interacted_postID int(10),
-	interactionTypeID tinyint,
-	notificationDate datetime
-	isRead tinyint(1)
+	interactionBy_userID int(10) NOT NULL,
+	interacted_postID int(10) NOT NULL,
+	interactionTypeID tinyint NOT NULL,
+	notificationDate datetime NOT NULL,
+	isRead tinyint(1) NOT NULL
 )
 
-CREATE TABLE InteractionType (
-	interactionTypeID tinyint,
-	interactionTypeDesc varchar(100)
+CREATE TABLE dbInteractionType (
+	interactionTypeID tinyint NOT NULL,
+	interactionTypeDesc varchar(100) NOT NULL
 )
 
-CREATE TABLE userLocation (
+CREATE TABLE dbuserLocation (
 	userID int(10) NOT NULL,
 	stateID int(10),
-	cityID int(10) NOT NULL
+	cityID int(10) NOT NULL,
+	constraint PKuserLocation primary key (userID)
 )
 
 CREATE TABLE dbState (
-	stateID int(10),
-	stateName varchar(50)
+	stateID int(10) NOT NULL,
+	stateName varchar(50) NOT NULL,
+	constraint PKstate primary key (stateID)
 )
 
 CREATE TABLE dbCity (
-	cityID int(10),
-	cityName varchar(50)
+	cityID int(10) NOT NULL,
+	cityName varchar(50) NOT NULL,
+	constraint PKcity primary key (cityID)
 )
 
 CREATE TABLE dbUniversity (
-	universityID int(10),
-	universityName varchar(100),
-	graduationDate datetime
+	universityID int(10) NOT NULL,
+	universityName varchar(100) NOT NULL,
+	graduationDate datetime NOT NULL,
+	constraint PKuniversity primary key (universityID)
 )
 
 CREATE TABLE dbHighschool (
-	highschoolID int(10),
-	highschoolName varchar(100),
-	graduationDate datetime
+	highschoolID int(10) NOT NULL,
+	highschoolName varchar(100) NOT NULL,
+	graduationDate datetime NOT NULL,
+	constraint PKhighschool primary key (highschoolID)
 )
 
-CREATE TABLE userUniversity (
-	userID int(10),
-	universityID int(10)
+CREATE TABLE dbuserUniversity (
+	userID int(10) NOT NULL,
+	universityID int(10) NOT NULL
 )
 
-CREATE TABLE userHighschool (
-	userID int(10),
-	highschoolID int(10)
+CREATE TABLE dbuserHighschool (
+	userID int(10) NOT NULL,
+	highschoolID int(10) NOT NULL
 )
 
 CREATE TABLE dbGroup (
-    groupID int(10),
-    groupName varchar(100),
-    createdBy_userID int(10),
-    groupProfilePicURL varchar(300)
+    groupID int(10) NOT NULL,
+    groupName varchar(100) NOT NULL,
+    createdBy_userID int(10) NOT NULL,
+    groupProfilePicURL varchar(300),
+    constraint PKgroup primary key (groupID)
 )
 
 CREATE TABLE dbGroupMembers (
-	groupID int(10),
-	userID_ofMember int(10)
+	groupID int(10) NOT NULL,
+	userID_ofMember int(10) NOT NULL
 )
 
-CREATE TABLE Post (
+CREATE TABLE dbPost (
 	postID int(10) NOT NULL,
 	userID int(10) NOT NULL,
 	groupID int(10),
 	postText varchar(200),
-	postDate datetime
+	postDate datetime NOT NULL,
+	constraint PKpost primary key (postID)
 )
 
-CREATE TABLE Comment (
-	postID int(10),
-	userID int(10),
-	commentDateTime datetime,
-	userComment varchar(200)
+CREATE TABLE dbComment (
+	postID int(10) NOT NULL,
+	userID int(10) NOT NULL,
+	commentDateTime datetime NOT NULL,
+	userComment varchar(200) NOT NULL,
+	constraint PKcomment primary key (userID,commentDateTime)
 )
 
-CREATE TABLE Image (
-	postID int(10),
-	imageURL varchar(300)
+CREATE TABLE dbImage (
+	postID int(10) NOT NULL,
+	imageURL varchar(300) NOT NULL,
+	constraint PKimage primary key (postID,imageURL)
 )
 
 CREATE TABLE dbLike (
-	postID int(10),
-	userID int(10)
+	postID int(10) NOT NULL,
+	userID int(10) NOT NULL,
+	constraint PKlike primary key (postID,userID)
 )
 
 CREATE TABLE dbDislike (
-	postID int(10),
-	userID int(10)
+	postID int(10) NOT NULL,
+	userID int(10) NOT NULL,
+	constraint PKdislike primary key (postID,userID)
 )
 
-CREATE TABLE ReportedPost (
-	reportID int(11),
-	postID int(10),
-	reportedBy_userID int(10),
-	typeID tinyint
+CREATE TABLE dbReportedPost (
+	reportID int(11) NOT NULL,
+	postID int(10) NOT NULL,
+	reportedBy_userID int(10) NOT NULL,
+	typeID tinyint NOT NULL,
+	constraint PKreportedPost primary key (reportID)
 )
 
-CREATE TABLE ReportType (
-	typeID tinyint,
-	reportDesc varchar(100)
+CREATE TABLE dbReportType (
+	typeID tinyint NOT NULL,
+	reportDesc varchar(100) NOT NULL
+	constraint PKreportType primary key (typeID)
 )
 
-CREATE TABLE AdminOfReportType (
-	userID int(10),
-	typeID tinyint
+CREATE TABLE dbAdminOfReportType (
+	userID int(10) NOT NULL,
+	typeID tinyint NOT NULL
+	constraint PKadminOfReportType primary key (userID,typeID)
 )
+
