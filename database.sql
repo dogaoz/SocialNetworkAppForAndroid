@@ -208,7 +208,7 @@ alter table dbPost add constraint FKpostGroupID
 		
 alter table dbComment add constraint FKcommentPostID
 		foreign key (postID) references dbPost (postID)
------ this FKs are not on the diagram
+----- these FKs are not on the diagram
 alter table dbComment add constraint FKcommentUserID
 		foreign key (userID) references dbUser (userID)
 		
