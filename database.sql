@@ -152,13 +152,93 @@ CREATE TABLE dbReportedPost (
 
 CREATE TABLE dbReportType (
 	typeID tinyint NOT NULL,
-	reportDesc varchar(100) NOT NULL
+	reportDesc varchar(100) NOT NULL,
 	constraint PKreportType primary key (typeID)
 )
 
 CREATE TABLE dbAdminOfReportType (
 	userID int(10) NOT NULL,
-	typeID tinyint NOT NULL
+	typeID tinyint NOT NULL,
 	constraint PKadminOfReportType primary key (userID,typeID)
 )
 
+alter table dbFriend add constraint FKfriend
+		foreign key (userID) references dbUser (userID)
+		
+alter table dbNotification add constraint FKnotificationUserID
+		foreign key (affected_userID) references dbUser (userID)
+
+-- this FK is not on the diagram		
+alter table dbNotification add constraint FKnotificationType
+		foreign key (interactionTypeID) 
+		references dbInteractionType (interactionTypeID)
+--------		
+alter table dbuserLocation add constraint FKuserLocationUserID
+		foreign key (userID) references dbUser (userID)
+		
+alter table dbuserLocation add constraint FKuserLocationState
+		foreign key (stateID) references dbState (stateID)
+		
+alter table dbuserLocation add constraint FKuserLocationCity
+		foreign key (cityID) references dbCity (cityID)
+		
+alter table dbuserUniversity add constraint FKuserUniversityUserID
+		foreign key (userID) references dbUser (userID)
+
+alter table dbuserUniversity add constraint FKuserUniversityUni
+		foreign key (universityID) references dbUniversity (universityID)
+
+alter table dbuserHighschool add constraint FKuserHighschoolUserID
+		foreign key (userID) references dbUser (userID)
+
+alter table dbuserHighschool add constraint FKuserHighschoolHS
+		foreign key (highschoolID) references dbHighschool (highschoolID)
+
+alter table dbGroup add constraint FKgroup
+		foreign key (createdBy_userID) references dbUser (userID)
+		
+alter table dbGroupMembers add constraint FKgroupMembersGroupID
+		foreign key (groupID) references dbGroup (groupID)
+		
+alter table dbPost add constraint FKpostUserID
+		foreign key (userID) references dbUser (userID)
+
+alter table dbPost add constraint FKpostGroupID
+		foreign key (groupID) references dbGroup (groupID)
+		
+alter table dbComment add constraint FKcommentPostID
+		foreign key (postID) references dbPost (postID)
+----- this FKs are not on the diagram
+alter table dbComment add constraint FKcommentUserID
+		foreign key (userID) references dbUser (userID)
+		
+alter table dbLike add constraint FKlikeUserID
+		foreign key (userID) references dbUser (userID)
+		
+alter table dbDislike add constraint FKdislikeUserID
+		foreign key (userID) references dbUser (userID)		
+--------------
+alter table dbImage add constraint FKimagePostID
+		foreign key (postID) references dbPost (postID)
+		
+alter table dbLike add constraint FKlikepostID
+		foreign key (postID) references dbPost (postID)
+		
+alter table dbDislike add constraint FKdislikePostID
+		foreign key (postID) references dbPost (postID)	
+
+----- this FK is not on the diagram
+alter table dbReportedPost add constraint FKreportedpostUserID
+		foreign key (reportedBy_userID) references dbUser (userID)
+--------------
+
+alter table dbReportedPost add constraint FKreportedpostPostID
+		foreign key (postID) references dbPost (postID)
+
+alter table dbReportedPost add constraint FKreportedpostTypeID
+		foreign key (typeID) references dbReportType (typeID)
+
+
+
+				
+					
