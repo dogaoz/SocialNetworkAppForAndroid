@@ -43,7 +43,7 @@ CREATE TABLE dbNotification (
 	interacted_postID int(10) NOT NULL,
 	interactionTypeID tinyint NOT NULL,
 	notificationDate datetime NOT NULL,
-	isRead tinyint(1) NOT NULL
+	isRead tinyint(1) NOT NULL default 0
 )
 
 CREATE TABLE dbInteractionType (
