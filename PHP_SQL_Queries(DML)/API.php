@@ -65,7 +65,7 @@ if(isset($_POST['functionname']) AND $_POST['functionname'] == 'removeFriend' AN
                	$aResult['result'] = myGroups($userID);
                 break;
             case 'getGroupPosts':
-            	$aResult['result'] = getGroupPosts($userID,$groupID);
+            	$aResult['result'] = getGroupPosts($groupID);
             	break;
             case 'createGroup':
             	$aResult['result'] = createGroup($userID,$groupName,$groupImageURL);

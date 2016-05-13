@@ -12,9 +12,6 @@
 	{
 		
 		global $dbConnection;
-		//TODO : do inner join with friends' userIDs
-		//where clause is wrong
-		//select friends's post between current date time and 2 days ago.
 		$query = $dbConnection->prepare('SELECT * FROM dbPost INNER JOIN dbFriend ON dbFriend.userID_ofFriend = dbPost.userID WHERE dbFriend.userID = ?');
 		$query->execute(array($userID));
 		$posts_fromQ  = $query->fetchAll(PDO::FETCH_ASSOC);
@@ -201,7 +198,41 @@
 //██║   ██║██╔══██╗██║   ██║██║   ██║██╔═══╝ 
 //╚██████╔╝██║  ██║╚██████╔╝╚██████╔╝██║     
 // ╚═════╝ ╚═╝  ╚═╝ ╚═════╝  ╚═════╝ ╚═╝  
+	function myGroups($userID)
+	{
+		global $dbConnection;
+		$query = $dbConnection->prepare('SELECT * FROM Group INNER JOIN GroupMembers on Group.groupID = GroupMembers.groupID WHERE GroupMembers.userID_ofMember = ? ');
+		$query->execute(array($userID));
+		$posts_fromQ  = $query->fetchAll(PDO::FETCH_ASSOC);
+		
+		$posts = array();
 
+		foreach ($posts_fromQ as $post)
+		{
+		    $posts[] = $post;
+		}
+
+		return json_encode($posts);
+	
+	}
+	
+	function getGroupPosts($groupID)
+	{
+		global $dbConnection;
+		$query = $dbConnection->prepare('SELECT * FROM dbPost WHERE groupID= ?');
+		$query->execute(array($userID));
+		$posts_fromQ  = $query->fetchAll(PDO::FETCH_ASSOC);
+		
+		$posts = array();
+
+		foreach ($posts_fromQ as $post)
+		{
+		    $posts[] = $post;
+		}
+
+		return json_encode($posts);
+	
+	}
   
   	                                           
                                              
@@ -211,7 +242,28 @@
 //██╔═══╝ ██║   ██║╚════██║   ██║   
 //██║     ╚██████╔╝███████║   ██║   
 //╚═╝      ╚═════╝ ╚══════╝   ╚═╝   
-                                  	
+    function newPost($userID,$groupID,$postText,$imageURLarray) 
+    {
+    	//TODO:add image urls to database
+    	global $dbConnection;
+		$query = $dbConnection->prepare('INSERT INTO Post (userID,groupID,postText,postDate) VALUES (?,?,?, NOW())');
+		$query->execute(array($userID,$groupID,$postText));
+		
+		$result = array();
+
+		if ($query)
+		{
+			$result[] = 'success';
+		}
+		else
+		{
+			$result[] = 'failure';	
+		}
+
+		return json_encode($result);
+    
+    
+    }                         	
 	function myPosts($userID)
 	{
 		global $dbConnection;
@@ -229,12 +281,155 @@
 		return json_encode($posts);
 	}
 	
+	function viewPost($postID)
+	{
+		global $dbConnection;
+		$query = $dbConnection->prepare('SELECT * FROM dbPost WHERE postID = ?');
+		$query->execute(array($postID));
+		$posts_fromQ  = $query->fetchAll(PDO::FETCH_ASSOC);
+		
+		$posts = array();
+
+		foreach ($posts_fromQ as $post)
+		{
+		    $posts[] = $post;
+		}
+
+		return json_encode($posts);
+	
+	
+	}
+	
+	function likePost($userID,$postID)
+	{
+		global $dbConnection;
+		$query = $dbConnection->prepare('INSERT INTO dbLike (postID,userID) VALUES (?,?)');
+		$query->execute(array($postID,$userID));
+		
+		$result = array();
+
+		if ($query)
+		{
+			$result[] = 'success';
+		}
+		else
+		{
+			$result[] = 'failure';	
+		}
+
+		return json_encode($result);
+	
+	}
+	
+	function dislikePost($userID,$postID)
+	{
+		global $dbConnection;
+		$query = $dbConnection->prepare('INSERT INTO dbDislike (postID,userID) VALUES (?,?)');
+		$query->execute(array($postID,$userID));
+		
+		$result = array();
+
+		if ($query)
+		{
+			$result[] = 'success';
+		}
+		else
+		{
+			$result[] = 'failure';	
+		}
+
+		return json_encode($result);
+	
+	
+	}
+	
+	function commentPost($userID,$postID,$userComment)
+	{
+		global $dbConnection;
+		$query = $dbConnection->prepare('INSERT INTO dbComment (postID,userID,commentDateTime,userComment) VALUES (?,?, NOW(), ?)');
+		$query->execute(array($postID,$userID,$userComment));
+		
+		$result = array();
+
+		if ($query)
+		{
+			$result[] = 'success';
+		}
+		else
+		{
+			$result[] = 'failure';	
+		}
+
+		return json_encode($result);
+
+	}
+	
 // █████╗ ██████╗ ███╗   ███╗██╗███╗   ██╗
 //██╔══██╗██╔══██╗████╗ ████║██║████╗  ██║
 //███████║██║  ██║██╔████╔██║██║██╔██╗ ██║
 //██╔══██║██║  ██║██║╚██╔╝██║██║██║╚██╗██║
 //██║  ██║██████╔╝██║ ╚═╝ ██║██║██║ ╚████║
 //╚═╝  ╚═╝╚═════╝ ╚═╝     ╚═╝╚═╝╚═╝  ╚═══╝	
+
+	function reportPost($userID,$postID,$reportReason)
+	{
+		global $dbConnection;
+		$query = $dbConnection->prepare('INSERT INTO dbReportedPost (postID,reportedBy_userID,typeID) VALUES (?,?,?)');
+		$query->execute(array($postID,$userID,$reportReason));
+		
+		$result = array();
+
+		if ($query)
+		{
+			$result[] = 'success';
+		}
+		else
+		{
+			$result[] = 'failure';	
+		}
+
+		return json_encode($result);
+	
+	}
+	
+	function getReportedPosts($admin_UserID)
+	{
+		global $dbConnection;
+		$query = $dbConnection->prepare('SELECT * FROM dbReportedPost WHERE typeID=(SELECT typeID FROM AdminOfReportType WHERE $userID= ?)');
+		$query->execute(array($admin_UserID));
+		$posts_fromQ  = $query->fetchAll(PDO::FETCH_ASSOC);
+		
+		$posts = array();
+
+		foreach ($posts_fromQ as $post)
+		{
+		    $posts[] = $post;
+		}
+
+		return json_encode($posts);	
+	
+	}
+	
+	function deletePost($postID)
+	{
+		global $dbConnection;
+		$query = $dbConnection->prepare('DELETE FROM Post WHERE postID = ?');
+		$query->execute(array($postID));
+		
+		$result = array();
+
+		if ($query)
+		{
+			$result[] = 'success';
+		}
+		else
+		{
+			$result[] = 'failure';	
+		}
+
+		return json_encode($result);
+	
+	}
 
 	
 	
