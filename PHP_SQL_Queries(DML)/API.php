@@ -77,7 +77,7 @@ if(isset($_POST['functionname']) AND $_POST['functionname'] == 'removeFriend' AN
             	$aResult['result'] = removeMemberFromGroup($groupID,$userID_toremove);
 				break;
 			case 'deleteGroup':
-            	$aResult['result'] = removeGroup($userID,$groupID);
+            	$aResult['result'] = removeGroup($groupID);
             	break;          
 
         	//Post Actions

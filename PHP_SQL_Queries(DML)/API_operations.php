@@ -168,7 +168,6 @@
 
 		return json_encode($result);
   	
-  	
   	}
   	
   	function removeFriend($userID,$friendUserID_toRemove)
@@ -233,6 +232,91 @@
 		return json_encode($posts);
 	
 	}
+	
+	function createGroup($userID,$groupName,$groupImageURL)
+	{
+		global $dbConnection;
+		$query = $dbConnection->prepare('INSERT INTO dbGroup (groupName,createdBy_userID,groupProfilePicURL) VALUES (?,?,?)');
+		$query->execute(array($groupName,$userID,$groupImageURL));
+		
+		$result = array();
+
+		if ($query)
+		{
+			$result[] = 'success';
+		}
+		else
+		{
+			$result[] = 'failure';	
+		}
+
+		return json_encode($result);
+		
+	}
+	
+	function addMemberToGroup($groupID,$userID_toadd)
+	{
+		global $dbConnection;
+		$query = $dbConnection->prepare('INSERT INTO dbGroupMembers (groupID,userID_ofMember) VALUES (?,?)');
+		$query->execute(array($groupID,$userID_toadd));
+		
+		$result = array();
+
+		if ($query)
+		{
+			$result[] = 'success';
+		}
+		else
+		{
+			$result[] = 'failure';	
+		}
+
+		return json_encode($result);
+		
+	}
+	
+	function removeMemberFromGroup($groupID,$userID_toremove)
+	{
+		global $dbConnection;
+		$query = $dbConnection->prepare('DELETE FROM dbGroupMembers WHERE (groupID = ? AND userID_ofMember = ?)');
+		$query->execute(array($groupID,$userID_toRemove));
+		
+		$result = array();
+
+		if ($query)
+		{
+			$result[] = 'success';
+		}
+		else
+		{
+			$result[] = 'failure';	
+		}
+
+		return json_encode($result);
+		
+	}
+	
+	function removeGroup($groupID)
+	{
+		global $dbConnection;
+		$query = $dbConnection->prepare('DELETE FROM dbGroup WHERE (groupID = ?)');
+		$query->execute(array($groupID));
+		
+		$result = array();
+
+		if ($query)
+		{
+			$result[] = 'success';
+		}
+		else
+		{
+			$result[] = 'failure';	
+		}
+
+		return json_encode($result);
+		
+	}
+
   
   	                                           
                                              
