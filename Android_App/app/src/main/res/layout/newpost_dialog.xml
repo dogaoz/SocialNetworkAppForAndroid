@@ -29,7 +29,7 @@
         <EditText
             android:layout_width="wrap_content"
             android:layout_height="100dp"
-            android:id="@+id/editText"
+            android:id="@+id/editTextNewPost"
             android:layout_below="@+id/userPic"
             android:layout_alignStart="@+id/userPic"
             android:layout_alignEnd="@+id/fullname"
@@ -40,14 +40,14 @@
             android:layout_height="wrap_content"
             android:text="İptal"
             android:id="@+id/cancelButton"
-            android:layout_below="@+id/editText"
+            android:layout_below="@+id/editTextNewPost"
             android:layout_toStartOf="@+id/button3" />
 
         <Button
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Paylaş"
-            android:id="@+id/button3"
+            android:id="@+id/buttonShare"
             android:layout_alignBottom="@+id/cancelButton"
             android:layout_alignParentEnd="true" />
 
@@ -56,6 +56,6 @@
         android:layout_height="wrap_content"
         android:text="Fotoğraf Ekle"
         android:id="@+id/button4"
-        android:layout_below="@+id/editText"
+        android:layout_below="@+id/editTextNewPost"
         android:layout_alignParentLeft="true"/>
 </RelativeLayout>

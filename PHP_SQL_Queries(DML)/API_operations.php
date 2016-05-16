@@ -44,13 +44,7 @@ ini_set('display_errors', 'On');
 	{
 		
 		global $dbConnection;
-		$query = $dbConnection->prepare('SELECT * FROM getPost INNER JOIN (SELECT DISTINCT dbUser.userID
-	FROM dbUser INNER JOIN dbFriend on
-	(
-	 ( dbFriend.userID = ? AND dbFriend.userID_ofFriend = dbUser.userID)
-		or 
-	 ( dbFriend.userID = dbUser.userID AND dbFriend.userID_ofFriend=?)
-	)) as myFriends ON getPost.userID = myFriends.userID');
+		$query = $dbConnection->prepare('SELECT * FROM getPost ORDER BY postDate DESC');
 		$query->execute(array($userID));
 		$posts_fromQ  = $query->fetchAll(PDO::FETCH_ASSOC);
 		
@@ -88,6 +82,134 @@ ini_set('display_errors', 'On');
 		}
 	
 		return $details;
+	}
+	
+	function  addLocation($userID,$stateID,$cityID)
+	{
+		global $dbConnection;
+		$query = $dbConnection->prepare('INSERT dbUserLocation
+											(userID,stateID,cityID) VALUES (?,?,?) ');
+		$query->execute(array($stateID,$cityID,$userID));
+		
+		$result = array();
+
+		if ($query)
+		{
+			$result[] = 'success';
+		}
+		else
+		{
+			$result[] = 'failure';	
+		}
+
+		return $result;
+	}
+	
+	function addUniversity($userID,$universityID,$graduationDate)
+	{
+		global $dbConnection;
+		$query = $dbConnection->prepare('INSERT dbUserUniversity
+											(userID,universityID,graduationDate) VALUES (?,?,?) ');
+		$query->execute(array($userID,$universityID,$graduationDate));
+		
+		$result = array();
+
+		if ($query)
+		{
+			$result[] = 'success';
+		}
+		else
+		{
+			$result[] = 'failure';	
+		}
+
+		return $result;
+	}
+	
+	function addHighschool($userID,$highschoolID,$graduationDate)
+	{
+		global $dbConnection;
+		$query = $dbConnection->prepare('INSERT dbUserHighschool
+											(userID,highschoolID,graduationDate) VALUES (?,?,?)');
+		$query->execute(array($userID,$highschoolID,$graduationDate));
+		
+		$result = array();
+
+		if ($query)
+		{
+			$result[] = 'success';
+		}
+		else
+		{
+			$result[] = 'failure';	
+		}
+
+		return $result;	
+	}
+	function  editLocation($userID,$stateID,$cityID)
+	{
+		global $dbConnection;
+		$query = $dbConnection->prepare('UPDATE dbUserLocation
+											SET stateID= ?, cityID= ?
+											WHERE userID = ? ');
+		$query->execute(array($stateID,$cityID,$userID));
+		
+		$result = array();
+
+		if ($query)
+		{
+			$result[] = 'success';
+		}
+		else
+		{
+			$result[] = 'failure';	
+		}
+
+		return $result;
+	}
+	
+	function editUniversity($userID,$universityID,$graduationDate)
+	{
+		global $dbConnection;
+		$query = $dbConnection->prepare('UPDATE dbUserUniversity
+											SET universityID = ?, graduationDate = ?
+											WHERE userID = ? ');
+		$query->execute(array($universityID,$graduationDate,$userID));
+		
+		$result = array();
+
+		if ($query)
+		{
+			$result[] = 'success';
+		}
+		else
+		{
+			$result[] = 'failure';	
+		}
+
+		return $result;
+	}
+	
+	function editHighschool($userID,$highschoolID,$graduationDate)
+	{
+		global $dbConnection;
+		$query = $dbConnection->prepare('UPDATE dbUserHighschool
+											SET highschoolID = ?, graduationDate = ?
+											WHERE userID = ? ');
+		$query->execute(array($highschoolID,$graduationDate,$userID));
+		
+		$result = array();
+
+		if ($query)
+		{
+			$result[] = 'success';
+		}
+		else
+		{
+			$result[] = 'failure';	
+		}
+
+		return $result;	
 	}
 	
 //███╗   ██╗ ██████╗ ████████╗██╗███████╗██╗ ██████╗ █████╗ ████████╗██╗ ██████╗ ███╗   ██╗
@@ -410,9 +532,9 @@ ini_set('display_errors', 'On');
 //╚═╝      ╚═════╝ ╚══════╝   ╚═╝   
     function newPost($userID,$groupID,$postText,$imageURLarray) 
     {
-    	//TODO:add image urls to database
+ 
     	global $dbConnection;
-		$query = $dbConnection->prepare('INSERT INTO Post (userID,groupID,postText,postDate) VALUES (?,?,?, NOW())');
+		$query = $dbConnection->prepare('INSERT INTO dbPost (userID,groupID,postText,postDate) VALUES (?,?,?, NOW())');
 		$query->execute(array($userID,$groupID,$postText));
 		
 		$result = array();
@@ -433,7 +555,7 @@ ini_set('display_errors', 'On');
 	function myPosts($userID)
 	{
 		global $dbConnection;
-		$query = $dbConnection->prepare('SELECT * FROM dbPost WHERE userID= ?');
+		$query = $dbConnection->prepare('SELECT * FROM getPost WHERE userID= ?');
 		$query->execute(array($userID));
 		$posts_fromQ  = $query->fetchAll(PDO::FETCH_ASSOC);
 		
@@ -450,7 +572,7 @@ ini_set('display_errors', 'On');
 	function viewPost($postID)
 	{
 		global $dbConnection;
-		$query = $dbConnection->prepare('SELECT * FROM dbPost WHERE postID = ?');
+		$query = $dbConnection->prepare('SELECT * FROM getPost WHERE postID = ?');
 		$query->execute(array($postID));
 		$posts_fromQ  = $query->fetchAll(PDO::FETCH_ASSOC);
 		

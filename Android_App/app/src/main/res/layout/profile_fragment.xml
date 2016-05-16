@@ -35,17 +35,22 @@
         android:paddingTop="@dimen/nav_header_vertical_spacing"
         android:text="Adı Soyadı"
         android:textColor="#EEEEEE"
+        android:id="@+id/textViewFullName"
         android:textAppearance="@style/TextAppearance.AppCompat.Body1" />
 
 
 </LinearLayout>
-
+    <android.support.v4.widget.SwipeRefreshLayout
+        android:id="@+id/swipeRefreshLayoutProfile"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@id/linearLayout">
     <android.support.v7.widget.RecyclerView
         android:id="@+id/my_recycler_view"
         android:scrollbars="vertical"
         android:background="#EEEEEE"
-        android:layout_below="@id/linearLayout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"/>
+    </android.support.v4.widget.SwipeRefreshLayout>
 
 </RelativeLayout>

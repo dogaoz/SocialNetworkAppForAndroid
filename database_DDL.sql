@@ -242,46 +242,27 @@ select dbPost.postID, dbPost.userID, dbUser.userName, dbUser.userLastName,
 
 
 	
-	
-drop view if exists postLikeCount;
-create view postLikeCount as
-select COUNT(dbLike.userID)-1 as likeCount
-				from dbPost
-				inner join dbLike on dbPost.postID = dbLike.postID
-				WHERE dbPost.postID = 1;				
-	
-	
-
-drop view if exists postDislikeCount;
-create view postDislikeCount as
-select COUNT(dbDislike.userID)-1 as dislikeCount
-				from dbPost
-				inner join dbDislike on dbPost.postID = dbDislike.postID				
-				WHERE dbPost.postID = 1;
-	
-
-drop view if exists postCommentCount;
-create view postCommentCount as
-select COUNT(dbComment.userID)-1 as commentCount
-				from dbPost
-				inner join dbComment on dbPost.postID = dbComment.postID
-				WHERE dbPost.postID = 1;				
-	
-	
 
 drop view if exists getPost;	
 create view getPost as
-		
-select dbPost.postID, dbPost.userID, postUserDetails.userName, postUserDetails.userLastName,
-		   postUserDetails.userProfilePicURL, dbPost.groupID, dbPost.postText, 
-		   dbPost.postDate, postLikeCount.likeCount, postDislikeCount.dislikeCount, postCommentCount.commentCount
-	from dbPost
-	inner join postUserDetails on dbPost.postID = postUserDetails.postID
-	inner join postLikeCount on dbPost.postID = postLikeCount.postID
-	inner join postDislikeCount on dbPost.postID = postDislikeCount.postID
-	inner join postCommentCount on dbPost.postID = postCommentCount.postID;
+select p.postID, p.userID, postUserDetails.userName, postUserDetails.userLastName,
+		   postUserDetails.userProfilePicURL, p.groupID, p.postText, 
+		   p.postDate, (select COUNT(dbLike.userID) as likeCount
+				from dbPost
+				inner join dbLike on dbPost.postID = dbLike.postID
+				WHERE dbPost.postID = p.postID) as likeCount, 
+		   (select COUNT(dbDislike.userID) as dislikeCount
+				from dbPost
+				inner join dbDislike on dbPost.postID = dbDislike.postID				
+				WHERE dbPost.postID = p.postID) as dislikeCount, 
+		   (select COUNT(dbComment.userID) as commentCount
+				from dbPost
+				inner join dbComment on dbPost.postID = dbComment.postID
+				WHERE dbPost.postID = p.postID) as commentCount
+	from dbPost as p
+	inner join postUserDetails on p.postID = postUserDetails.postID;
 
-
+select * from getPost;
 -- MOCKUP DATA
 
 INSERT INTO dbUser (userName,userLastName,userBirthdate,userProfilePicURL,userEmail,userPassword) VALUES
@@ -305,26 +286,12 @@ INSERT INTO dbFriend (userID,userID_ofFriend) VALUES
 (1,2),
 (1,3),
 (2,3);
--- user ID zeros inserted for every post.
--- because when we do inner join while getting post likes,dislikes,comments
--- inner join returns null postIDs and query fails.
 INSERT INTO dbLike (userID,postID) VALUES
-(0,1),
-(0,2),
-(0,3),
-(0,4),
-(0,5),
-(0,6),
 (1,2),
 (1,3);
 
 INSERT INTO dbDislike (userID,postID) VALUES
-(0,1),
-(0,2),
-(0,3),
-(0,4),
-(0,5),
-(0,6),
+
 (1,2),
 (1,6),
 (2,6),
@@ -332,12 +299,6 @@ INSERT INTO dbDislike (userID,postID) VALUES
 
 
 INSERT INTO dbComment (userID,postID,commentDateTime,userComment) VALUES
-(0,1,"0000-00-00 00:00:00","placeholder"),
-(0,2,"0000-00-00 00:00:00","placeholder"),
-(0,3,"0000-00-00 00:00:00","placeholder"),
-(0,4,"0000-00-00 00:00:00","placeholder"),
-(0,5,"0000-00-00 00:00:00","placeholder"),
-(0,6,"0000-00-00 00:00:00","placeholder"),
 (1,6,"2016-05-15 11:57:32","sanada merhaba");
 
 

@@ -12,14 +12,14 @@ public class FeedItem {
     String lastName;
     String profileImageURL;
     String content;
-    Date postTime;
+    String postTime;
     String[] imageURLs;
     int likeCount;
     int dislikeCount;
     int commentCount;
 
     public FeedItem(int fpostID, String fname, String flastName, String fprofileImageURL,
-                    String fcontent, Date fpostTime, String[] fimageURLs,
+                    String fcontent, String fpostTime, String[] fimageURLs,
                     int flikeCount, int fdislikeCount, int fcommentCount)
     {
         postID = fpostID;
@@ -52,7 +52,7 @@ public class FeedItem {
     }
 
     public String getPostedTime() {
-        return "3 saat önce.";
+        return postTime;
     }
 
     public int getDislikeCount() {

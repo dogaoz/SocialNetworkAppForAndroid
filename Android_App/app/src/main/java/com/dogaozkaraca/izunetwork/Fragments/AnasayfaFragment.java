@@ -2,14 +2,17 @@ package com.dogaozkaraca.izunetwork.Fragments;
 
 import android.app.Fragment;
 import android.os.Bundle;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.dogaozkaraca.izunetwork.API.APIRequest;
 import com.dogaozkaraca.izunetwork.Adapters.FeedAdapter;
 import com.dogaozkaraca.izunetwork.AdapterItems.FeedItem;
+import com.dogaozkaraca.izunetwork.MainActivity;
 import com.dogaozkaraca.izunetwork.R;
 
 import java.util.ArrayList;
@@ -20,10 +23,9 @@ import java.util.ArrayList;
  */
 public class AnasayfaFragment  extends Fragment {
     private RecyclerView mRecyclerView;
-    private RecyclerView.Adapter mAdapter;
     private RecyclerView.LayoutManager mLayoutManager;
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(LayoutInflater inflater, final ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View v = inflater.inflate(R.layout.anasayfa_fragment, container, false);
@@ -32,7 +34,6 @@ public class AnasayfaFragment  extends Fragment {
 
         // RecyclerView
         mRecyclerView = (RecyclerView) v.findViewById(R.id.my_recycler_view);
-
         // use this setting to improve performance if you know that changes
         // in content do not change the layout size of the RecyclerView
         mRecyclerView.setHasFixedSize(true);
@@ -40,15 +41,18 @@ public class AnasayfaFragment  extends Fragment {
         // use a linear layout manager
         mLayoutManager = new LinearLayoutManager(inflater.getContext());
         mRecyclerView.setLayoutManager(mLayoutManager);
+        final SwipeRefreshLayout swp = (SwipeRefreshLayout) v.findViewById(R.id.swipeRefreshLayout);
 
-        // specify an adapter (see also next example)
-        ArrayList<FeedItem> feed = new ArrayList<>();
-        feed.add(new FeedItem(1,"Adı","Soyadı","profileImage URL","Gönderi 1 ",null,null,150,15,3));
-        feed.add(new FeedItem(2,"Adı","Soyadı","profileImage URL","Gönderi 2 ",null,null,18,65,45));
-        feed.add(new FeedItem(3,"Adı","Soyadı","profileImage URL","Gönderi 3 ",null,null,45,2,0));
-        feed.add(new FeedItem(4,"Adı","Soyadı","profileImage URL","Gönderi 4 ",null,null,120,4,22));
-        mAdapter = new FeedAdapter(feed);
-        mRecyclerView.setAdapter(mAdapter);
+        APIRequest.loadFeed(MainActivity.currentUserID,container.getContext(),mRecyclerView,swp);
+        swp.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                // Refresh items
+                APIRequest.loadFeed(MainActivity.currentUserID,container.getContext(),mRecyclerView,swp);
+
+            }
+        });
+
 
 
 

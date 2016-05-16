@@ -3,10 +3,10 @@
 require 'dbconfig.php';
 require 'API_operations.php';
 session_start();
+header('Content-Type: application/json');
 
 if ($_SESSION['USERID'])
 {
-header('Content-Type: application/json');
 
 
   $aResult = array();
@@ -24,15 +24,29 @@ if( !isset($_POST['functionname']) ) { $aResult['error'] = 'Error : empty reques
 			//Homepage Actions
             case 'loadFeed':
                	$aResult['result'] = loadFeed($userID);
-                break;
-            
-            
+                break; 
             //Profile Actions
             case 'myProfile':
                	$aResult['result'] = myProfile($userID);
                	break;
-            //TODO : profile editing actions location city state etc
-               	
+			case 'addLocation':
+				$aResult['result'] = editLocation($userID,$stateID,$cityID);
+				break;
+			case 'addUniversity':
+				$aResult['result'] = editUniversity($userID,$universityID);
+				break;
+			case 'addHighschool':
+				$aResult['result'] = editHighschool($userID,$highschoolID);
+				break;
+			case 'editLocation':
+				$aResult['result'] = editLocation($userID,$stateID,$cityID);
+				break;
+			case 'editUniversity':
+				$aResult['result'] = editUniversity($userID,$universityID);
+				break;
+			case 'editHighschool':
+				$aResult['result'] = editHighschool($userID,$highschoolID);
+				break;
             //Notification Actions
             case 'myNotifications':
             	$aResult['result'] = myNotifications($userID);
@@ -80,6 +94,9 @@ if( !isset($_POST['functionname']) ) { $aResult['error'] = 'Error : empty reques
 				break;
         	//Post Actions
         	case 'newPost':
+				$groupID = null; //Temporary
+				$imageURLarray = null; //Temporary
+				$postText = $_POST['postText'];
             	$aResult['result'] = newPost($userID,$groupID,$postText,$imageURLarray);
             	break;
         	case 'myPosts':
@@ -153,6 +170,31 @@ else
 			$_SESSION['USERID'] = $row['userID'];
 			}
 		}
+	}
+	else if(isset($_POST['functionname']) AND $_POST['functionname'] == "createAccount" 
+				AND isset($_POST['email']) 
+				AND isset($_POST['password'])
+				AND isset($_POST['birthdate'])
+				AND isset($_POST['name'])
+				AND isset($_POST['lastname']))
+	{
+		global $dbConnection;
+		$query = $dbConnection->prepare('INSERT dbUser
+											(userName,userLastName,userBirthdate,userEmail,userPassword) 
+											VALUES (?,?,?,?,?) ');
+		$query->execute(array($_POST['name'],$_POST['lastname'],$_POST['birthdate'],$_POST['email'],$_POST['password']));
+		
+		$result = array();
+
+		if ($query)
+		{
+			$result[] = 'Account successfully created!';
+		}
+		else
+		{
+			$result[] = 'failure';	
+		}
+		
 	}
 	else
 	{

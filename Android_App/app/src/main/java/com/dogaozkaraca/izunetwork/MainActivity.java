@@ -150,7 +150,6 @@ public class MainActivity extends AppCompatActivity
 
         TextView header_fullname = (TextView) navigationView.getHeaderView(0).findViewById(R.id.fullname_header);
         header_fullname.setText(currentUserName + " "  + currentUserLastName);
-            APIRequest.loadFeed(currentUserID,this);
 
     }
 
