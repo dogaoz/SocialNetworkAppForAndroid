@@ -652,13 +652,6 @@ ini_set('display_errors', 'On');
 
 	}
 	
-// █████╗ ██████╗ ███╗   ███╗██╗███╗   ██╗
-//██╔══██╗██╔══██╗████╗ ████║██║████╗  ██║
-//███████║██║  ██║██╔████╔██║██║██╔██╗ ██║
-//██╔══██║██║  ██║██║╚██╔╝██║██║██║╚██╗██║
-//██║  ██║██████╔╝██║ ╚═╝ ██║██║██║ ╚████║
-//╚═╝  ╚═╝╚═════╝ ╚═╝     ╚═╝╚═╝╚═╝  ╚═══╝	
-
 	function reportPost($userID,$postID,$reportReason)
 	{
 		global $dbConnection;
@@ -678,6 +671,57 @@ ini_set('display_errors', 'On');
 
 		return $result;
 	
+	}
+	
+// █████╗ ██████╗ ███╗   ███╗██╗███╗   ██╗
+//██╔══██╗██╔══██╗████╗ ████║██║████╗  ██║
+//███████║██║  ██║██╔████╔██║██║██╔██╗ ██║
+//██╔══██║██║  ██║██║╚██╔╝██║██║██║╚██╗██║
+//██║  ██║██████╔╝██║ ╚═╝ ██║██║██║ ╚████║
+//╚═╝  ╚═╝╚═════╝ ╚═╝     ╚═╝╚═╝╚═╝  ╚═══╝	
+
+	
+	
+	function givePrivilege($userID_toMakeAdmin,$privilegeType)
+	{
+		global $dbConnection;
+		$query = $dbConnection->prepare('INSERT INTO dbAdminOfReportType (userID,typeID) VALUES (?,?)');
+		$query->execute(array($userID_toMakeAdmin,$privilegeType));
+		
+		$result = array();
+
+		if ($query)
+		{
+			$result[] = 'success';
+		}
+		else
+		{
+			$result[] = 'failure';	
+		}
+
+		return $result;
+		
+	}
+	
+	function removePrivilege($userID_toRemoveAdmin,$privilegeType)
+	{
+		global $dbConnection;
+		$query = $dbConnection->prepare('DELETE FROM dbAdminOfReportType WHERE (userID = ? AND typeID = ?)');
+		$query->execute(array($userID_toRemoveAdmin,$privilegeType));
+		
+		$result = array();
+
+		if ($query)
+		{
+			$result[] = 'success';
+		}
+		else
+		{
+			$result[] = 'failure';	
+		}
+
+		return $result;
+		
 	}
 	
 	function getReportedPosts($admin_UserID)

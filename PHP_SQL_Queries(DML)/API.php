@@ -114,15 +114,22 @@ if( !isset($_POST['functionname']) ) { $aResult['error'] = 'Error : empty reques
             case 'commentPost':
             	$aResult['result'] = commentPost($userID,$postID,$userComment);
             	break;
-            //Admin Actions
+            
             case 'reportPost':
             	$aResult['result'] = reportPost($userID,$postID,$reportReason);
             	break;
+			//Admin Actions
             case 'getReportedPosts':
             	$aResult['result'] = getReportedPosts($admin_UserID);
             	break;
             case 'deletePost':
             	$aResult['result'] = deletePost($postID);
+            	break;
+			case 'givePrivilege':
+				$aResult['result'] = givePrivilege($userID_toMakeAdmin,$privilegeType);
+            	break;
+			case 'removePrivilege':
+				$aResult['result'] = removePrivilege($userID_toRemoveAdmin,$privilegeType);
             	break;
             case 'logout':
 				unset($_SESSION['USERID']);
