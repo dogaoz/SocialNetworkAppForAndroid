@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:id="@+id/signup_sublayout2"
+    android:visibility="gone"
+    android:background="#44AAAA">
+    <com.dogaozkaraca.izunetwork.CustomViews.lobster
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="25sp"
+        android:text="Egitim bilgileriniz"
+        android:id="@+id/textView"
+        android:textColor="#FFFFFF"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="30dp"/>
+
+    <AutoCompleteTextView
+        android:id="@+id/editText16"
+        android:layout_below="@+id/textView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="#FFF"
+        android:hint="Hangi Üniversitedensiniz"
+        android:padding="10dp"
+        android:singleLine="true"
+        android:textColor="#000000"
+        android:textColorHint="#808080"
+        android:layout_centerHorizontal="true"
+        android:layout_marginLeft="40dp"
+        android:layout_marginRight="40dp"
+        android:layout_marginTop="20dp"
+        />
+    <EditText
+        android:id="@+id/editText17"
+        android:layout_below="@+id/editText16"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="#FFF"
+        android:hint="Üniversite Mezuniyet Yılı"
+        android:padding="10dp"
+        android:enabled="false"
+        android:singleLine="true"
+        android:textColor="#000000"
+        android:textColorHint="#808080"
+        android:layout_centerHorizontal="true"
+        android:layout_marginLeft="40dp"
+        android:layout_marginRight="40dp"
+        android:layout_marginTop="20dp"
+        />
+    <AutoCompleteTextView
+
+        android:id="@+id/editText18"
+        android:layout_below="@+id/editText17"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="#FFF"
+        android:hint="Hangi Lisedensiniz"
+        android:padding="10dp"
+        android:enabled="false"
+        android:singleLine="true"
+        android:textColor="#000000"
+        android:textColorHint="#808080"
+        android:layout_centerHorizontal="true"
+        android:layout_marginLeft="40dp"
+        android:layout_marginRight="40dp"
+        android:layout_marginTop="20dp"
+        />
+    <EditText
+        android:id="@+id/editText19"
+        android:layout_below="@+id/editText18"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="#FFF"
+        android:hint="Lise Mezuniyet Yılı"
+        android:padding="10dp"
+        android:enabled="false"
+        android:singleLine="true"
+        android:textColor="#000000"
+        android:textColorHint="#808080"
+        android:layout_centerHorizontal="true"
+        android:layout_marginLeft="40dp"
+        android:layout_marginRight="40dp"
+        android:layout_marginTop="20dp"
+        />
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="İleri"
+        android:id="@+id/buttonNext2"
+        android:textColor="@color/colorPrimary"
+        android:layout_marginTop="20dp"
+        android:background="#FFFFFF"
+        android:layout_below="@+id/editText19"
+        android:layout_alignStart="@+id/editText19"
+        android:layout_alignEnd="@+id/editText19" />
+
+
+
+
+</RelativeLayout>

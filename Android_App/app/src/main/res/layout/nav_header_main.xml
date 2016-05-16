@@ -27,6 +27,7 @@
         android:gravity="center"
         android:paddingTop="@dimen/nav_header_vertical_spacing"
         android:text="Adı Soyadı"
+        android:id="@+id/fullname_header"
         android:textColor="#EEEEEE"
         android:textAppearance="@style/TextAppearance.AppCompat.Body1" />
 

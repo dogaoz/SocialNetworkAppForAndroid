@@ -1,5 +1,37 @@
 <?php
-//ini_set('display_errors', 'On');
+ini_set('display_errors', 'On');
+// █████╗ ██╗   ██╗████████╗██╗  ██╗
+//██╔══██╗██║   ██║╚══██╔══╝██║  ██║
+//███████║██║   ██║   ██║   ███████║
+//██╔══██║██║   ██║   ██║   ██╔══██║
+//██║  ██║╚██████╔╝   ██║   ██║  ██║
+//╚═╝  ╚═╝ ╚═════╝    ╚═╝   ╚═╝  ╚═╝
+	function login($email,$password)
+	{
+		global $dbConnection;
+		$query = $dbConnection->prepare('SELECT userID,userName,userLastName,userBirthDate,userEmail FROM dbUser WHERE (userEmail = ? AND userPassword = ?) ');
+		$query->execute(array($email,$password));
+		$result = $query->fetchAll(PDO::FETCH_ASSOC);
+		
+		if (COUNT($result) == 0)
+		{
+			return 1;
+		}
+		else
+		{
+			
+		$users = array();
+		foreach ($result as $user)
+		{
+		    $users[] = $user;
+		}
+		return $users;
+		
+		}
+		
+		
+		
+	}
 
 //███╗   ███╗ █████╗ ██╗███╗   ██╗
 //████╗ ████║██╔══██╗██║████╗  ██║
@@ -12,7 +44,13 @@
 	{
 		
 		global $dbConnection;
-		$query = $dbConnection->prepare('SELECT * FROM dbPost INNER JOIN dbFriend ON dbFriend.userID_ofFriend = dbPost.userID WHERE dbFriend.userID = ?');
+		$query = $dbConnection->prepare('SELECT * FROM getPost INNER JOIN (SELECT DISTINCT dbUser.userID
+	FROM dbUser INNER JOIN dbFriend on
+	(
+	 ( dbFriend.userID = ? AND dbFriend.userID_ofFriend = dbUser.userID)
+		or 
+	 ( dbFriend.userID = dbUser.userID AND dbFriend.userID_ofFriend=?)
+	)) as myFriends ON getPost.userID = myFriends.userID');
 		$query->execute(array($userID));
 		$posts_fromQ  = $query->fetchAll(PDO::FETCH_ASSOC);
 		
@@ -23,7 +61,7 @@
 		    $posts[] = $post;
 		}
 
-		return json_encode($posts);
+		return $posts;
 
 	}
 	
@@ -46,10 +84,10 @@
 
 		foreach ($profileDetails as $detail)
 		{
-			$details[] = $detail
+			$details[] = $detail;
 		}
 	
-		return json_encode($details);
+		return $details;
 	}
 	
 //███╗   ██╗ ██████╗ ████████╗██╗███████╗██╗ ██████╗ █████╗ ████████╗██╗ ██████╗ ███╗   ██╗
@@ -62,7 +100,7 @@
 	function myNotifications($userID)
 	{
 		global $dbConnection;
-		$query = $dbConnection->prepare('SELECT * FROM dbNotification WHERE affected_userID= ?');
+		$query = $dbConnection->prepare('SELECT * FROM dbNotification WHERE affected_userID= ? ORDER BY notificationDate DESC');
 		$query->execute(array($userID));
 		$posts_fromQ  = $query->fetchAll(PDO::FETCH_ASSOC);
 		
@@ -73,7 +111,7 @@
 		    $posts[] = $post;
 		}
 
-		return json_encode($posts);
+		return $posts;
 	}
 	
 	function createNotification($interactionByUserID,$affectedUserID,$interactedPostID,$interactionTypeID)
@@ -95,7 +133,7 @@
 			$result[] = 'failure';	
 		}
 
-		return json_encode($result);
+		return $result;
 	
 	
 	}
@@ -119,7 +157,7 @@
 			$result[] = 'failure';	
 		}
 
-		return json_encode($result);
+		return $result;
 	
 	}
 	
@@ -133,8 +171,8 @@
   	function myFriends($userID)
   	{
   		global $dbConnection;
-		$query = $dbConnection->prepare('SELECT dbUser.userName,dbUser.userLastName,dbUser.userProfilePicURL FROM dbUser INNER JOIN dbFriend on dbFriend.userID = dbUser.userID WHERE userID= ? ');
-		$query->execute(array($userID));
+		$query = $dbConnection->prepare('SELECT DISTINCT dbUser.userID, dbUser.userName,dbUser.userLastName,dbUser.userProfilePicURL FROM dbUser INNER JOIN dbFriend on (( dbFriend.userID = ? AND dbFriend.userID_ofFriend = dbUser.userID) or ( dbFriend.userID = dbUser.userID AND dbFriend.userID_ofFriend=?))');
+		$query->execute(array($userID,$userID));
 		$friend_fromQ  = $query->fetchAll(PDO::FETCH_ASSOC);
 		
 		$friends = array();
@@ -144,7 +182,7 @@
 		    $friends[] = $friend;
 		}
 
-		return json_encode($friends);
+		return $friends;
   	
   	
   	}
@@ -166,7 +204,7 @@
 			$result[] = 'failure';	
 		}
 
-		return json_encode($result);
+		return $result;
   	
   	}
   	
@@ -187,9 +225,27 @@
 			$result[] = 'failure';	
 		}
 
-		return json_encode($result);
+		return $result;
   	
   	}
+	
+	function friendCount($userID)
+	{
+		global $dbConnection;
+		$query = $dbConnection->prepare('SELECT COUNT(*) as friendCount FROM dbFriend WHERE userID=?');
+		$query->execute(array($userID));
+		$query_result  = $query->fetchAll(PDO::FETCH_ASSOC);
+		
+		$resultArray = array();
+
+		foreach ($query_result as $result_row)
+		{
+		    $resultArray[] = $result_row;
+		}
+
+		return $resultArray;
+		
+	}
   	
 // ██████╗ ██████╗  ██████╗ ██╗   ██╗██████╗ 
 //██╔════╝ ██╔══██╗██╔═══██╗██║   ██║██╔══██╗
@@ -211,7 +267,7 @@
 		    $posts[] = $post;
 		}
 
-		return json_encode($posts);
+		return $posts;
 	
 	}
 	
@@ -229,7 +285,7 @@
 		    $posts[] = $post;
 		}
 
-		return json_encode($posts);
+		return $posts;
 	
 	}
 	
@@ -250,7 +306,7 @@
 			$result[] = 'failure';	
 		}
 
-		return json_encode($result);
+		return $result;
 		
 	}
 	
@@ -271,7 +327,7 @@
 			$result[] = 'failure';	
 		}
 
-		return json_encode($result);
+		return $result;
 		
 	}
 	
@@ -292,7 +348,7 @@
 			$result[] = 'failure';	
 		}
 
-		return json_encode($result);
+		return $result;
 		
 	}
 	
@@ -313,11 +369,37 @@
 			$result[] = 'failure';	
 		}
 
-		return json_encode($result);
+		return $result;
 		
 	}
 
-  
+	function groupDetails($groupID)
+	{
+		global $dbConnection;
+		$query = $dbConnection->prepare('SELECT * FROM dbGroup WHERE groupID= ?');
+		$query->execute(array($groupID));
+		$groupQuery  = $query->fetchAll(PDO::FETCH_ASSOC);
+		
+		$groupDetails = array();
+
+		foreach ($groupQuery as $detail)
+		{
+		    $groupDetails[] = $detail;
+		}
+		
+		$query2 = $dbConnection->prepare('SELECT COUNT(*) AS groupMemberCount FROM dbGroupMembers WHERE groupID= ?');
+		$query2->execute(array($groupID));
+		$groupQuery2  = $query->fetchAll(PDO::FETCH_ASSOC);
+		
+		foreach ($groupQuery2 as $detail)
+		{
+		    $groupDetails[] = $detail;
+		}
+		
+
+		return $groupDetails;
+			
+	}
   	                                           
                                              
 //██████╗  ██████╗ ███████╗████████╗
@@ -344,7 +426,7 @@
 			$result[] = 'failure';	
 		}
 
-		return json_encode($result);
+		return $result;
     
     
     }                         	
@@ -362,7 +444,7 @@
 		    $posts[] = $post;
 		}
 
-		return json_encode($posts);
+		return $posts;
 	}
 	
 	function viewPost($postID)
@@ -379,7 +461,7 @@
 		    $posts[] = $post;
 		}
 
-		return json_encode($posts);
+		return $posts;
 	
 	
 	}
@@ -401,7 +483,7 @@
 			$result[] = 'failure';	
 		}
 
-		return json_encode($result);
+		return $result;
 	
 	}
 	
@@ -422,7 +504,7 @@
 			$result[] = 'failure';	
 		}
 
-		return json_encode($result);
+		return $result;
 	
 	
 	}
@@ -444,7 +526,7 @@
 			$result[] = 'failure';	
 		}
 
-		return json_encode($result);
+		return $result;
 
 	}
 	
@@ -472,7 +554,7 @@
 			$result[] = 'failure';	
 		}
 
-		return json_encode($result);
+		return $result;
 	
 	}
 	
@@ -490,7 +572,7 @@
 		    $posts[] = $post;
 		}
 
-		return json_encode($posts);	
+		return $posts;	
 	
 	}
 	
@@ -511,7 +593,7 @@
 			$result[] = 'failure';	
 		}
 
-		return json_encode($result);
+		return $result;
 	
 	}
 

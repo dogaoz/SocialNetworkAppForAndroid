@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent" android:layout_height="match_parent"
+    android:background="#44AAAA"
+    android:id="@+id/login_sublayout"
+    >
+    <com.dogaozkaraca.izunetwork.CustomViews.lobster
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="40sp"
+        android:text="Izu Network"
+        android:id="@+id/textView"
+        android:textColor="#FFFFFF"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="50dp"/>
+    <EditText
+
+        android:id="@+id/editTextEmailLogin"
+        android:layout_below="@+id/textView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="#FFF"
+        android:hint="E-mail"
+        android:inputType="textEmailAddress"
+        android:padding="10dp"
+        android:singleLine="true"
+        android:textColor="#000000"
+        android:textColorHint="#808080"
+
+        android:layout_centerHorizontal="true"
+        android:layout_marginLeft="40dp"
+        android:layout_marginRight="40dp"
+        android:layout_marginTop="20dp"
+         />
+
+    <EditText
+        android:id="@+id/editTextPasswordLogin"
+        android:layout_below="@+id/editTextEmailLogin"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="#FFF"
+        android:hint="Parola"
+        android:inputType="textPassword"
+        android:padding="10dp"
+        android:singleLine="true"
+        android:textColor="#000000"
+        android:layout_marginTop="20dp"
+        android:textColorHint="#808080"
+
+        android:layout_centerHorizontal="true"
+        android:layout_marginLeft="40dp"
+        android:layout_marginRight="40dp"/>
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Giriş Yap"
+        android:id="@+id/buttonLogin"
+        android:textColor="@color/colorPrimary"
+        android:layout_marginTop="20dp"
+        android:background="#FFFFFF"
+        android:layout_below="@+id/editTextPasswordLogin"
+        android:layout_alignStart="@+id/editTextPasswordLogin"
+        android:layout_alignEnd="@+id/editTextPasswordLogin" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:layout_marginTop="20dp"
+        android:text="Hesabınız yok mu? Hemen Kaydolun!"
+        android:textColor="#FFF"
+        android:id="@+id/textViewSignup"
+        android:layout_below="@+id/buttonLogin"
+        android:layout_centerHorizontal="true" />
+
+
+</RelativeLayout>

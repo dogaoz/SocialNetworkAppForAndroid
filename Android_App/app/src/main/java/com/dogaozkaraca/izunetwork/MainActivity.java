@@ -2,6 +2,9 @@ package com.dogaozkaraca.izunetwork;
 
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
+import android.content.Context;
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -15,7 +18,9 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 
+import com.dogaozkaraca.izunetwork.API.APIRequest;
 import com.dogaozkaraca.izunetwork.Dialogs.CreateGroup_Dialog;
 import com.dogaozkaraca.izunetwork.Dialogs.NewPost_Dialog;
 import com.dogaozkaraca.izunetwork.Fragments.AdminFragment;
@@ -45,10 +50,33 @@ public class MainActivity extends AppCompatActivity
     MenuItem actionItem;
     FloatingActionButton fab;
     public static int currentUserID;
+    public static String currentUserName;
+    public static String currentUserLastName;
+
+    public static boolean loggedin = false;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        SharedPreferences prefs = getSharedPreferences("user", MODE_PRIVATE);
+
+        currentUserName = prefs.getString("userName","");
+        currentUserLastName = prefs.getString("userLastName","");
+
+        if(prefs.getInt("userID",-99) != -99)
+        {
+            loggedin = true;
+        }
+
+        if(loggedin == false)
+        {
+            Intent i = new Intent(MainActivity.this, AuthenticationActivity.class);
+            startActivity(i);
+            finish();
+        }
+
+
+
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         this.getSupportActionBar().setTitle("Ana Sayfa");
@@ -120,6 +148,9 @@ public class MainActivity extends AppCompatActivity
             }
         });
 
+        TextView header_fullname = (TextView) navigationView.getHeaderView(0).findViewById(R.id.fullname_header);
+        header_fullname.setText(currentUserName + " "  + currentUserLastName);
+            APIRequest.loadFeed(currentUserID,this);
 
     }
 

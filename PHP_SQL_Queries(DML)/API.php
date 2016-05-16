@@ -3,22 +3,15 @@
 require 'dbconfig.php';
 require 'API_operations.php';
 session_start();
+
+if ($_SESSION['USERID'])
+{
 header('Content-Type: application/json');
 
 
   $aResult = array();
 
-if( !isset($_POST['functionname']) ) { $aResult['error'] = 'Error bp908!'; }
-
-if(isset($_POST['functionname']) AND $_POST['functionname'] == 'addFriend' AND !isset($_POST['friendUserID']) )
-	{
-		$aResult['error'] = 'Error bp915!';
-	}
-
-if(isset($_POST['functionname']) AND $_POST['functionname'] == 'removeFriend' AND !isset($_POST['friendUserID']) )
-	{ 
-		$aResult['error'] = 'Error bp916!'; 
-	}
+if( !isset($_POST['functionname']) ) { $aResult['error'] = 'Error : empty request!'; }
 
 	$userID = $_SESSION['USERID'];
 	$friendUserID_toAdd = $_POST['friendUserID'];
@@ -60,6 +53,9 @@ if(isset($_POST['functionname']) AND $_POST['functionname'] == 'removeFriend' AN
 			case 'removeFriend':
 			   $aResult['result'] = removeFriend($userID,$friendUserID_toRemove);
                 break;
+			case 'friendCount':
+				$array['result'] = friendCount($userID);
+				break;
             //Group Actions
             case 'myGroups':
                	$aResult['result'] = myGroups($userID);
@@ -79,7 +75,9 @@ if(isset($_POST['functionname']) AND $_POST['functionname'] == 'removeFriend' AN
 			case 'deleteGroup':
             	$aResult['result'] = removeGroup($groupID);
             	break;          
-
+			case 'groupDetails':
+				$array['result'] = groupDetails($groupID);
+				break;
         	//Post Actions
         	case 'newPost':
             	$aResult['result'] = newPost($userID,$groupID,$postText,$imageURLarray);
@@ -101,7 +99,7 @@ if(isset($_POST['functionname']) AND $_POST['functionname'] == 'removeFriend' AN
             	break;
             //Admin Actions
             case 'reportPost':
-            	$aResult['result'] = reportPost($userID,$postID,$reportReason);
+            	$aResult['result'] = reportPost($userID,$postID,$reportReason);
             	break;
             case 'getReportedPosts':
             	$aResult['result'] = getReportedPosts($admin_UserID);
@@ -109,10 +107,17 @@ if(isset($_POST['functionname']) AND $_POST['functionname'] == 'removeFriend' AN
             case 'deletePost':
             	$aResult['result'] = deletePost($postID);
             	break;
-            
+            case 'logout':
+				unset($_SESSION['USERID']);
+				$result = array();
+				$result[] = "Logged out!";
+				$aResult['result'] = $result;
+				break;
                         
             default:
-               //$aResult['error'] = function not found : '.$_POST['functionname'].'!';
+				$result = array();
+				$result[] = "API Request is empty!";
+				$aResult['result'] = $result;
                break;
         }
     	
@@ -121,5 +126,44 @@ if(isset($_POST['functionname']) AND $_POST['functionname'] == 'removeFriend' AN
     
     
 echo json_encode($aResult);
+}
+else
+{ // User not logged in 
+	$result = array();
+
+	if(isset($_POST['functionname']) AND $_POST['functionname'] == "login" AND isset($_POST['email']) AND isset($_POST['password']) )
+	{
+		$login = login($_POST['email'],$_POST['password']);
+		if ($login == 1)
+		{
+		$result[] = "Error: access denied!";
+
+		}
+		else
+		{
+		$result = $login;
+		global $dbConnection;	
+		$q = "SELECT userID FROM dbUser WHERE userEmail=?;";
+		$query = $dbConnection->prepare($q);
+		$query->execute(array($_POST['email']));
+		
+		$rows = $query->fetchAll(PDO::FETCH_ASSOC);
+			foreach( $rows as $row ) 
+			{
+			$_SESSION['USERID'] = $row['userID'];
+			}
+		}
+	}
+	else
+	{
+		
+	$result[] = "Error: access denied!";
+		
+		
+	}
+	echo json_encode($result);
+	
+}
+
 
 ?>
