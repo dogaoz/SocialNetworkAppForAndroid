@@ -312,7 +312,7 @@ ini_set('display_errors', 'On');
   	function addFriend($userID,$friendUserID_toAdd)
   	{
   		global $dbConnection;
-		$query = $dbConnection->prepare('INSERT INTO Friend VALUES (?,?)');
+		$query = $dbConnection->prepare('INSERT INTO dbFriend VALUES (?,?)');
 		$query->execute(array($userID,$friendUserID_toAdd));
 		
 		$result = array();
@@ -333,7 +333,7 @@ ini_set('display_errors', 'On');
   	function removeFriend($userID,$friendUserID_toRemove)
   	{
   		global $dbConnection;
-		$query = $dbConnection->prepare('DELETE FROM Friend WHERE (userID = ? AND userID_ofFriend = ?)');
+		$query = $dbConnection->prepare('DELETE FROM dbFriend WHERE (userID = ? AND userID_ofFriend = ?)');
 		$query->execute(array($userID,$friendUserID_toRemove));
 		
 		$result = array();
@@ -378,7 +378,7 @@ ini_set('display_errors', 'On');
 	function myGroups($userID)
 	{
 		global $dbConnection;
-		$query = $dbConnection->prepare('SELECT * FROM Group INNER JOIN GroupMembers on Group.groupID = GroupMembers.groupID WHERE GroupMembers.userID_ofMember = ? ');
+		$query = $dbConnection->prepare('SELECT * FROM dbGroup INNER JOIN dbGroupMembers on Group.groupID = GroupMembers.groupID WHERE GroupMembers.userID_ofMember = ? ');
 		$query->execute(array($userID));
 		$posts_fromQ  = $query->fetchAll(PDO::FETCH_ASSOC);
 		
@@ -745,7 +745,7 @@ ini_set('display_errors', 'On');
 	function deletePost($postID)
 	{
 		global $dbConnection;
-		$query = $dbConnection->prepare('DELETE FROM Post WHERE postID = ?');
+		$query = $dbConnection->prepare('DELETE FROM dbPost WHERE postID = ?');
 		$query->execute(array($postID));
 		
 		$result = array();
